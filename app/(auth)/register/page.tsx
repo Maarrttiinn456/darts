@@ -1,17 +1,5 @@
-import { supabase } from '@/lib/supabase';
+import RegisterForm from '@/components/auth/regsiter-form';
 
 export default async function RegisterPage() {
-    const { data, error } = await supabase.from('leagues').select('*');
-
-    console.log(data);
-    console.log(error);
-
-    return (
-        <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe cum
-            minus, fugiat delectus nemo veritatis ullam deserunt nihil excepturi
-            dolores qui, facilis sed accusamus! Ipsum voluptas fugiat nihil
-            eveniet sunt!
-        </div>
-    );
+    return <RegisterForm />;
 }
