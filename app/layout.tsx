@@ -1,16 +1,19 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import Header from '@/components/header';
+import { Barlow, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
 
-const inter = Inter({
+const barlow = Barlow({
     variable: '--font-sans',
     subsets: ['latin', 'latin-ext'],
+    weight: ['400', '500', '600'],
 });
 
-const playfair = Playfair_Display({
+const barlowCondensed = Barlow_Condensed({
     variable: '--font-heading',
     subsets: ['latin', 'latin-ext'],
+    weight: ['600', '700', '800'],
 });
 
 export const metadata: Metadata = {
@@ -26,9 +29,9 @@ export default function RootLayout({
     return (
         <html lang="cs" className="dark">
             <body
-                className={`${inter.variable} ${playfair.variable} antialiased`}
+                className={`${barlow.variable} ${barlowCondensed.variable} antialiased`}
             >
-                {children}
+                <main>{children}</main>
                 <Toaster position="top-center" />
             </body>
         </html>

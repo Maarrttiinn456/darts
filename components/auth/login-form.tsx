@@ -1,6 +1,6 @@
 'use client';
 
-import AuthCard from '@/app/(auth)/_components/auth-card';
+import AuthCard from '@/components/auth/auth-card';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +11,7 @@ import { LoginFormData } from '@/lib/schemas';
 import { Button } from '../ui/button';
 import { handleLogin } from '@/lib/actions';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function LoginForm() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(loginSchema),
     });
@@ -63,11 +64,20 @@ export default function LoginForm() {
                         id="password"
                         type="password"
                         placeholder="••••••••"
+                        autoComplete="off"
                         {...register('password')}
                     />
                 </div>
-                <Button type="submit" className="w-full mt-2 cursor-pointer">
-                    Přihlásit se
+                <Button
+                    type="submit"
+                    className="w-full mt-2 cursor-pointer"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? (
+                        <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                        'Přihlásit se'
+                    )}
                 </Button>
             </form>
         </AuthCard>

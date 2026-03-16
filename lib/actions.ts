@@ -1,8 +1,9 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { LoginFormData, RegisterFormData } from './schemas';
 import { createSupabaseServerClient } from './supabase';
-import { ActionResponse } from './types';
+import { ActionResponse, Profile } from './types';
 
 export async function handleRegister(
     formData: RegisterFormData,
@@ -15,7 +16,7 @@ export async function handleRegister(
 
     const { email, password, username, color } = formData;
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    const { error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -28,21 +29,7 @@ export async function handleRegister(
         return { ok: false, message: authError.message };
     }
 
-    const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-            id: authData.user?.id,
-            username,
-            color,
-        });
-
-    if (profileError) {
-        console.error('Profile error:', profileError);
-        return { ok: false, message: profileError.message };
-    }
-
-    console.log('authData', authData);
-    console.log('profileData', profileData);
+    //uživatel se zapíše do tabulky profiles v supabase pomocí triggeru
 
     return { ok: true, message: 'Účet byl úspěšně vytvořen' };
 }
@@ -69,4 +56,42 @@ export async function handleLogin(
     }
 
     return { ok: true, message: 'Jste příhlášen' };
+}
+
+export async function logoutAction() {
+    const supabase = await createSupabaseServerClient();
+    await supabase.auth.signOut();
+    redirect('/login');
+}
+
+export async function createLeague(
+    leagueName: string,
+    players: string[],
+): Promise<ActionResponse> {
+    const supabase = await createSupabaseServerClient();
+
+    const { data: league, error: leagueError } = await supabase
+        .from('leagues')
+        .insert({ name: leagueName })
+        .select()
+        .single();
+
+    if (leagueError) {
+        return { ok: false, message: leagueError.message };
+    }
+
+    const { error: membersError } = await supabase
+        .from('league_members')
+        .insert(
+            players.map((playerId) => ({
+                league_id: league.id,
+                player_id: playerId,
+            })),
+        );
+
+    if (membersError) {
+        return { ok: false, message: membersError.message };
+    }
+
+    return { ok: true, message: 'Liga úspěšně vytvořena' };
 }
