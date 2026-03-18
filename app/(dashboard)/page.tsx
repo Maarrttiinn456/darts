@@ -1,16 +1,14 @@
 import LeagueList from '@/components/league/league-list';
-import { Suspense } from 'react';
-import { Plus } from 'lucide-react';
+import SectionHeader from '@/components/section-header';
 import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default function DashboardPage() {
     return (
         <div className="space-y-4">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                    Všechny ligy
-                </h1>
+            <SectionHeader heading="Všechny ligy">
                 <Button variant="default">
                     <Link
                         href="/league/add"
@@ -20,7 +18,7 @@ export default function DashboardPage() {
                         Přidat ligu
                     </Link>
                 </Button>
-            </div>
+            </SectionHeader>
             <Suspense fallback={<div>Loading...</div>}>
                 <LeagueList />
             </Suspense>

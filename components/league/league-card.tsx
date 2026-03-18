@@ -41,7 +41,7 @@ export default function LeagueCard({
             <CardFooter>
                 <Button variant="outline" className="w-full">
                     <Link
-                        href={`/leagues/${id}`}
+                        href={`/league/${id}`}
                         className="flex items-center gap-2"
                     >
                         <Eye className="size-4" />

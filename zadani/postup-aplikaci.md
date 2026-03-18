@@ -42,3 +42,38 @@ Obecne
 hrac muze hrat vice lig a v kazde bude mit svou vlastni statistiku
 pokud jsou hraci v lize tak vzdy hraji turnaj vsichni
 kazdy vzdy hraje stejne pocet zapasu a typn zapasu jako ostatni
+
+Stranka: league/[id]/page.tsx
+URL: league/leagueId
+Co na ni uvidim
+
+- vypis vsech trounamentu
+  Akce
+- moznost pirdat turnaj
+  Button presmerovani
+- league/leagueId/tournament/tournamentId
+
+Stranka: league[id]/tournament/[id]/page.tsx
+URL: league/leagueId/tournament/tournamentId
+Co na ni uvdim
+
+- vypis vsech her
+  Akcce
+- moznost pridat hru
+  Button presmerovani
+- league/leagueId/tournament/tournamentId/game/gameId
+
+Stranka: league[id]/tournament/[id]/game/[id]
+URL: league/leagueId/tournament/tournamentId/game/gameId
+Co na ni uvdim
+
+- rozhrani pro ovladani hry jednotlive
+  Akcce
+- moznost pridat hracum body
+- urcit o jakoy typ hry se jedna
+- moznost ukonit hru a pripsat kazdemu hraci do game_results tabulky:
+  id
+  game_id
+  player_id
+  rank
+  points
