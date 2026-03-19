@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { LoginFormData, RegisterFormData } from './schemas';
 import { createSupabaseServerClient } from './supabase';
-import { ActionResponse, Profile } from './types';
+import { ActionResponse } from './types';
 
 export async function handleRegister(
     formData: RegisterFormData,
@@ -94,4 +94,39 @@ export async function createLeague(
     }
 
     return { ok: true, message: 'Liga úspěšně vytvořena' };
+}
+
+export async function createTournament(
+    formData: FormData,
+    leagueId: string,
+): Promise<ActionResponse & { tournamentId?: string }> {
+    const name = formData.get('name') as string;
+
+    if (!name) {
+        return { ok: false, message: 'Vyplňte prosím název turnaje' };
+    }
+
+    const supabase = await createSupabaseServerClient();
+
+    const { data, error } = await supabase
+        .from('tournaments')
+        .insert({ league_id: leagueId, name: name })
+        .select()
+        .single();
+
+    if (error) {
+        console.log(error.message);
+        return {
+            ok: false,
+            message: error.message,
+        };
+    }
+
+    console.log('aa');
+
+    return {
+        ok: true,
+        message: 'Turnaj úspěšně vytvořen',
+        tournamentId: data.id,
+    };
 }
