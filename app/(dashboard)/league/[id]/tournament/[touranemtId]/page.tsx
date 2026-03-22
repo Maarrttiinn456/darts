@@ -33,6 +33,14 @@ export default async function TournamentPage({
         <div className="space-y-6">
             <StepBack path={`/league/${(await params).id}`} />
 
+            <div>
+                <h1 className="text-3xl font-bold mb-4">Turnaj: 22.09.3655</h1>
+
+                <div className="border p-4">
+                    <p className="text-gray-600"></p>
+                </div>
+            </div>
+
             <SectionHeader heading="Odehrané hry">
                 <AddGameDialog />
             </SectionHeader>
@@ -48,7 +56,7 @@ export default async function TournamentPage({
                             <h3 className="text-lg font-semibold">
                                 {game.game_type}
                             </h3>
-                            <div className="flex flex-wrap gap-2 mt-1">
+                            <div className="flex flex-wrap gap-x-2 gap-y-1 mt-1 text-sm text-gray-400">
                                 {game.game_results
                                     .sort((a, b) => a.rank - b.rank)
                                     .map((result) => (

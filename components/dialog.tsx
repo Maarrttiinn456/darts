@@ -1,3 +1,5 @@
+'use client';
+
 import {
     Dialog as DialogUI,
     DialogClose,
@@ -42,6 +44,8 @@ export default function Dialog({
     onSubmit,
     gameTypeOptions,
 }: DialogProps) {
+    const actualDate = new Date().toLocaleDateString('cs-CZ');
+
     return (
         <DialogUI>
             <DialogTrigger render={<Button variant="default" />}>
@@ -79,7 +83,11 @@ export default function Dialog({
                         ) : (
                             <Field>
                                 <Label htmlFor="name-1">{labelText}</Label>
-                                <Input id="name-1" name="name" />
+                                <Input
+                                    id="name-1"
+                                    name="name"
+                                    defaultValue={actualDate}
+                                />
                             </Field>
                         )}
                     </FieldGroup>

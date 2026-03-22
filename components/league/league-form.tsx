@@ -10,6 +10,7 @@ import { createLeague } from '@/lib/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import StepBack from '../step-back';
 
 export default function LeagueForm({ players }: { players: Profile[] }) {
     const [name, setName] = useState('');
@@ -30,6 +31,11 @@ export default function LeagueForm({ players }: { players: Profile[] }) {
     };
 
     const handleSubmit = async () => {
+        if (!name) {
+            toast.error('Název ligy je povinný');
+            return;
+        }
+
         const result = await createLeague(name, selectedPlayers);
 
         if (result.ok) {
@@ -41,10 +47,12 @@ export default function LeagueForm({ players }: { players: Profile[] }) {
     };
 
     return (
-        <div className="w-full max-w-lg space-y-8">
+        <div className="w-full space-y-8">
+            <StepBack path="/" />
+
             {/* Hlavička */}
             <div className="space-y-1">
-                <p className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                <p className="text-xs font-semibold uppercase text-muted-foreground">
                     Nová liga
                 </p>
                 <h1 className="font-heading text-4xl font-bold tracking-tight">
@@ -56,7 +64,7 @@ export default function LeagueForm({ players }: { players: Profile[] }) {
             <div className="space-y-2">
                 <Label
                     htmlFor="name"
-                    className="text-xs tracking-widest uppercase font-semibold text-muted-foreground"
+                    className="text-xs uppercase font-semibold text-muted-foreground"
                 >
                     Název ligy
                 </Label>
@@ -70,7 +78,7 @@ export default function LeagueForm({ players }: { players: Profile[] }) {
             </div>
 
             <div className="space-y-4">
-                <Label className="text-xs tracking-widest uppercase font-semibold text-muted-foreground">
+                <Label className="text-xs uppercase font-semibold text-muted-foreground">
                     Hráči
                 </Label>
                 <div className="grid grid-cols-2 gap-2">

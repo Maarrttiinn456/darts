@@ -32,7 +32,7 @@ export default function AddTournamentDialog() {
             description="Zadej název turnaje, který chceš přidat."
             buttonText="Přidat turnaj"
             mode="tournament"
-            labelText="Vyber turnaj"
+            labelText="Název turnaje"
             onSubmit={handleSubmit}
         />
     );
