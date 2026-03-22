@@ -8,7 +8,7 @@ export default function DashboardLayout({
     return (
         <>
             <Header />
-            <div className="container mt-6">{children}</div>
+            <div className="container my-6">{children}</div>
         </>
     );
 }

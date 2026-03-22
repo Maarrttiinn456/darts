@@ -39,15 +39,15 @@ export default function LeagueCard({
                 </ul>
             </CardContent>
             <CardFooter>
-                <Button variant="outline" className="w-full">
-                    <Link
-                        href={`/league/${id}`}
-                        className="flex items-center gap-2"
-                    >
+                <Link
+                    href={`/league/${id}`}
+                    className="flex items-center gap-2 w-full"
+                >
+                    <Button variant="outline" className="w-full">
                         <Eye className="size-4" />
                         Zobrazit detail
-                    </Link>
-                </Button>
+                    </Button>
+                </Link>
             </CardFooter>
         </Card>
     );

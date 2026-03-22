@@ -19,6 +19,14 @@ export default async function LeagueList() {
         return <div>Nepodařilo se načíst ligy</div>;
     }
 
+    if (!leagues || leagues.length === 0) {
+        return (
+            <div className="text-center text-gray-500">
+                Žádné ligy nenalezeny
+            </div>
+        );
+    }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-4">
             {leagues?.map((league) => {

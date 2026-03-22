@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Header from '@/components/header';
 import { Barlow, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
