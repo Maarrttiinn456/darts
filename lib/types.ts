@@ -43,3 +43,17 @@ export type TournamentGame = {
     created_at: string;
     game_results: GameResult[];
 };
+
+export type Tournament = {
+    id: string;
+    league_id: string;
+    name: string;
+    date: string;
+    status: string;
+    games: TournamentGame[];
+};
+
+export type LeagueMember = {
+    player_id: string;
+    profiles: Pick<Profile, 'id' | 'username' | 'color'>;
+};

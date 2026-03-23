@@ -28,7 +28,7 @@ export default async function LeagueList() {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {leagues?.map((league) => {
                 return <LeagueCard key={league.id} {...league} />;
             })}

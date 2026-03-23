@@ -3,6 +3,8 @@ import TournamentCard from '@/components/tournament/tournament-card';
 import AddTournamentDialog from '@/components/tournament/add-tournament-dialog';
 import { createSupabaseServerClient } from '@/lib/supabase';
 import StepBack from '@/components/step-back';
+import { Tournament, LeagueMember } from '@/lib/types';
+import LeagueLeaderboard from '@/components/league/league-leaderboard';
 
 export default async function LeagueDetail({
     params,
@@ -13,19 +15,37 @@ export default async function LeagueDetail({
 
     const leagueId = (await params).id;
 
-    const [{ data: tournaments }, { data: league_members }] = await Promise.all(
-        [
-            supabase.from('tournaments').select('*').eq('league_id', leagueId),
+    const [{ data: tournaments }, { data: league }, { data: leagueMembers }] =
+        (await Promise.all([
+            supabase
+                .from('tournaments')
+                .select(
+                    '*, games(*, game_results(*, profiles(username, color)))',
+                )
+                .eq('league_id', leagueId),
+            supabase.from('leagues').select('name').eq('id', leagueId).single(),
             supabase
                 .from('league_members')
-                .select('*')
+                .select('player_id, profiles(id, username, color)')
                 .eq('league_id', leagueId),
-        ],
-    );
+        ])) as [
+            { data: Tournament[] | null; error: unknown },
+            { data: { name: string } | null; error: unknown },
+            { data: LeagueMember[] | null; error: unknown },
+        ];
 
     return (
         <div className="space-y-6">
             <StepBack path="/" />
+
+            <h1 className="text-3xl font-bold">
+                Liga: {league?.name || 'Neznámý turnaj'}
+            </h1>
+
+            <LeagueLeaderboard
+                leagueMembers={leagueMembers}
+                tournaments={tournaments}
+            />
 
             <SectionHeader heading="Turnaje">
                 <AddTournamentDialog />
@@ -49,9 +69,3 @@ export default async function LeagueDetail({
         </div>
     );
 }
-
-//potrebuju v vypsat Tournaments s hraci a i jejich skore
-
-//potrebuju league id abych:
-//se dotazal na league_members
-//se dotazal na tournaments

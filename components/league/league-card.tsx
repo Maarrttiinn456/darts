@@ -23,7 +23,7 @@ export default function LeagueCard({
                 <CardDescription>{players.length} hráčů</CardDescription>
             </CardHeader>
             <CardContent className="flex-1">
-                <ul className="space-y-1">
+                <ul className="flex flex-wrap gap-x-2 gap-y-y1">
                     {players.map(({ player }) => (
                         <li
                             key={player.id}

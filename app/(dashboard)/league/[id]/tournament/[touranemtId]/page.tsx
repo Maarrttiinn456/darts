@@ -3,6 +3,8 @@ import AddGameDialog from '@/components/game/add-game-dialog';
 import { createSupabaseServerClient } from '@/lib/supabase';
 import { TournamentGame } from '@/lib/types';
 import StepBack from '@/components/step-back';
+import TournamentLeaderboard from '@/components/tournament/tournament-leaderboard';
+import { LeagueMemberWithProfile } from '@/lib/types';
 
 export default async function TournamentPage({
     params,
@@ -11,35 +13,53 @@ export default async function TournamentPage({
 }) {
     const supabase = await createSupabaseServerClient();
 
-    const tournamentId = (await params).touranemtId;
+    const { id: leagueId, touranemtId: tournamentId } = await params;
 
-    const { data: tournamentGames, error } = (await supabase
-        .from('games')
-        .select('*, game_results(*, profiles(username, color))')
-        .eq('tournament_id ', tournamentId)
-        .order('created_at', { ascending: false })) as {
-        data: TournamentGame[] | null;
-        error: unknown;
-    };
+    const [
+        { data: tournamentGames, error },
+        { data: tournament },
+        { data: leagueMembers },
+    ] = (await Promise.all([
+        supabase
+            .from('games')
+            .select('*, game_results(*, profiles(username, color))')
+            .eq('tournament_id', tournamentId)
+            .order('created_at', { ascending: false }),
+        supabase
+            .from('tournaments')
+            .select('name')
+            .eq('id', tournamentId)
+            .single(),
+        supabase
+            .from('league_members')
+            .select('player_id, profiles(id, username, color)')
+            .eq('league_id', leagueId),
+    ])) as [
+        { data: TournamentGame[] | null; error: unknown },
+        { data: { name: string } | null; error: unknown },
+        {
+            data: LeagueMemberWithProfile[] | null;
+            error: unknown;
+        },
+    ];
 
     if (error) {
         console.error('Error fetching tournament games:', error);
         return <div>Chyba při načítání her.</div>;
     }
 
-    console.log('Tournament Games:', tournamentGames);
-
     return (
         <div className="space-y-6">
-            <StepBack path={`/league/${(await params).id}`} />
+            <StepBack path={`/league/${leagueId}`} />
 
-            <div>
-                <h1 className="text-3xl font-bold mb-4">Turnaj: 22.09.3655</h1>
+            <h1 className="text-3xl font-bold">
+                Turnaj: {tournament?.name || 'Neznámý turnaj'}
+            </h1>
 
-                <div className="border p-4">
-                    <p className="text-gray-600"></p>
-                </div>
-            </div>
+            <TournamentLeaderboard
+                tournamentGames={tournamentGames}
+                leagueMembers={leagueMembers}
+            />
 
             <SectionHeader heading="Odehrané hry">
                 <AddGameDialog />
