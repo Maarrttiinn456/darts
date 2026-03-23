@@ -37,11 +37,8 @@ export default function PlayerStats({
                 <div className="col-span-6 h-full">
                     <div className="flex flex-col justify-between items-center h-full py-[2vh]">
                         <div>{profile.username}</div>
-                        <div className="text-[clamp(3rem,4vh,9rem)]">
+                        <div className="text-[clamp(3rem,4vh,9rem)] font-bold">
                             {score}
-                        </div>
-                        <div className="text-[clamp(1rem,1vh,3rem)]">
-                            20 bodů
                         </div>
                     </div>
                 </div>

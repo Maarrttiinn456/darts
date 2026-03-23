@@ -137,3 +137,8 @@
 @utility container {
     @apply max-w-2xl mx-auto px-4;
 }
+
+th:not(:first-child),
+td:not(:first-child) {
+    text-align: center !important;
+}
