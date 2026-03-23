@@ -3,9 +3,18 @@ import { Settings } from 'lucide-react';
 import Link from 'next/link';
 import { LogoutButton } from './auth/logout-button';
 import { getUser } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase';
 
 export default async function Header() {
     const user = await getUser();
+
+    const supabase = await createSupabaseServerClient();
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('username, color')
+        .eq('id', user?.id)
+        .single();
 
     return (
         <header className="border-b border-border bg-card">
@@ -19,7 +28,7 @@ export default async function Header() {
                     {/* Pravá část – barva uživatele + přihlášení */}
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">
-                            {user?.user_metadata.username}
+                            {profile?.username}
                         </span>
                         <div className="flex items-center gap-2">
                             <Link href="/settings">

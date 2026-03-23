@@ -35,6 +35,30 @@ export async function handleRegister(
     return { ok: true, message: 'Účet byl úspěšně vytvořen' };
 }
 
+export async function handleUpdateSettings(
+    formData: FormData,
+): Promise<ActionResponse> {
+    const username = formData.get('username') as string;
+    const color = formData.get('color') as string;
+
+    const supabase = await createSupabaseServerClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { ok: false, message: 'Nejsi přihlášen' };
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ username, color })
+        .eq('id', user.id);
+
+    if (error) return { ok: false, message: error.message };
+
+    revalidatePath('/');
+    return { ok: true, message: 'Nastavení bylo úspěšně aktualizováno' };
+}
+
 export async function handleLogin(
     formData: LoginFormData,
 ): Promise<ActionResponse> {
